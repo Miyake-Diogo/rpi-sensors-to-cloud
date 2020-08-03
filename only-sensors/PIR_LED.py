@@ -1,4 +1,4 @@
-
+# https://maker.pro/raspberry-pi/tutorial/how-to-interface-a-pir-motion-sensor-with-raspberry-pi-gpio
 import RPi.GPIO as GPIO
 import time
 
