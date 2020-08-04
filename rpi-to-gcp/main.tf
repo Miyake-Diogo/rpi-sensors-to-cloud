@@ -25,7 +25,7 @@ resource "google_pubsub_topic" "movement-sensor" {
 
 resource "google_cloudiot_registry" "cloudiot-registry" {
   name     = "rpi-cloudiot-registry"
-  region   = "us-central1"
+  region   = var.default_region
   event_notification_configs {
     pubsub_topic_name = google_pubsub_topic.movement-sensor.id
     subfolder_matches = ""

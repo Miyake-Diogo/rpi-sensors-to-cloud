@@ -1,32 +1,46 @@
-import RPi.GPIO as GPIO
+# Funções para usar e retornar os dados necessários
+from gpiozero import MotionSensor
+import Adafruit_DHT
+# from datetime import datetime
 import time
+import RPi.GPIO as gpio
 
-GPIO.setmode(GPIO.BCM)
+gpio.setmode(gpio.BCM)
+gpio.setup(4, gpio.IN)
 
-GPIO_TRIGGER = 18
-GPIO_ECHO = 24
-
-GPIO.setwarnings(False)
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
+pir = MotionSensor(4)
+sensor = Adafruit_DHT.DHT11
+DHT_DATA_PIN = 27
 
 
-def FindDistance():
-    GPIO.output(GPIO_TRIGGER, True)
 
-    time.sleep(0.00001)
-    GPIO.output(GPIO_TRIGGER, False)
+def FindMovement_v2():
+    time.sleep(2)
+    if (gpio.input(4) == gpio.HIGH):
+        movimento = "Movimento Detectado"
+    else:
+        movimento = "Nenhum Movimento Detectado"
 
-    StartTime = time.time()
-    StopTime = time.time()
+    return movimento
 
-    while GPIO.input(GPIO_ECHO) == 0:
-        StartTime = time.time()
 
-    while GPIO.input(GPIO_ECHO) == 1:
-        StopTime = time.time()
+def FindMovement():
+    time.sleep(2)
+    if (pir.wait_for_motion() == True):
+        movimento = "Movimento Detectado"
+    else:
+        movimento = "Nenhum Movimento Detectado"
 
-    TimeElapsed = StopTime - StartTime
-    distance = (TimeElapsed * 34300) / 2
+    return movimento
 
-    return distance
+
+def FindTemperature():
+    umidade, temperatura = Adafruit_DHT.read_retry(sensor, DHT_DATA_PIN)
+    return temperatura
+
+
+def FindHumidity():
+    umidade, temperatura = Adafruit_DHT.read_retry(sensor, DHT_DATA_PIN)
+    return umidade
+
+
